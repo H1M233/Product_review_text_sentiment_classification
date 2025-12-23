@@ -42,7 +42,7 @@ os.makedirs(os.path.dirname(result_path), exist_ok=True)
 f = open(result_path, 'w', encoding='utf-8')
 
 
-# 检查GPU是否可用
+'''检查GPU是否可用'''
 print("\n" + '='*50)
 gpus = tf.config.list_physical_devices('GPU')
 if gpus:
@@ -65,30 +65,12 @@ else:
 print("="*50)
 
 
-'''（该注释可删）
+'''
 文本预处理模块：
-
-模块功能：
-    1. 数据清洗 (Data Cleaning)
-        - 移除HTML标签、URL链接、表情符号等
-        - 处理特殊字符和多余空白
-        - 统一文本编码和格式
-    
-    2. 文本规范化 (Text Normalization)  
-        - 中文分词（将句子切分为词语）
-        - 停用词过滤（移除常见但无意义词语）
-    
-    3. 数据转换 (Data Transformation)
-        - 将文本列表转换为pandas DataFrame
-        - 添加标签列（正面/负面）
-        - 保存为CSV或pickle格式以供后续使用
-
-输入：原始评论文本（xml格式）
-输出：结构化的干净文本数据，可直接用于特征提取
 '''
 
 
-# 用于初始化训练集和测试集文件，并对其去除干扰内容和进行分词（即预处理）//
+# 用于初始化训练集和测试集文件，并对其去除干扰内容和进行分词（即预处理）
 class init_reviews:
     def __init__(self, positive_path, negative_path, test_path, name='cn'):
         # 初始化训练集
@@ -144,7 +126,7 @@ class init_reviews:
             reviews.append({
                 'review_id': review_id,
                 'review': review_text,
-                'label' : 1
+                'label': 1
             })
 
         for match in re.finditer(pattern, negative_text, re.DOTALL):
@@ -157,7 +139,7 @@ class init_reviews:
             reviews.append({
                 'review_id': review_id,
                 'review': review_text,
-                'label' : 0
+                'label': 0
             })
 
         # 转换为DataFrame
@@ -184,7 +166,7 @@ class init_reviews:
             reviews.append({
                 'review_id': review_id,
                 'review': review_text,
-                'label' : review_label
+                'label': review_label
             })
 
         # 转换为DataFrame
@@ -197,30 +179,8 @@ class init_reviews:
 以下为传统模型部分:
 '''
 
-'''（该注释可删）
-传统机器学习模型训练流程：
 
-步骤概述：
-    1. 特征提取 (TF-IDF向量化)
-        - 将文本转换为数值特征矩阵
-        - 计算词频-逆文档频率，量化词语的重要性
-        - 生成稀疏特征矩阵，每行代表一个文档，每列代表一个词语的TF-IDF值
-    
-    2. 模型训练
-        - 使用带标签的训练数据拟合分类器
-        - 学习特征与情感标签之间的映射关系
-    
-    3. 模型评估
-        - 在测试集上评估模型性能
-        - 使用准确率、精确率、召回率等指标
-
-使用模型：
-    - 朴素贝叶斯 (Naive Bayes): 基于贝叶斯定理，假设特征独立
-    - 支持向量机 (SVM): 寻找最优超平面分割不同类别
-    - 随机森林 (Random Forest): 集成多棵决策树，提高泛化能力
-'''
-
-
+# 创建用于存放各语言模型的文件夹
 models_dir = os.path.join(current_dir, 'models')
 os.makedirs(models_dir, exist_ok=True)
 os.makedirs(os.path.join(models_dir, 'Chinese'), exist_ok=True)
@@ -243,6 +203,7 @@ class tradition_models:
         self.SVM_dir = os.path.join(models_dir, name, 'SVM.pkl')   # SVM模型保存路径
         self.RandomForest_dir = os.path.join(models_dir, name, 'Random Forest.pkl')    # Random Forest模型保存路径
 
+        # 加载时立即执行TFIDF处理
         self.TF_IDF()
 
     def TF_IDF(self):
@@ -251,18 +212,26 @@ class tradition_models:
         try:
             # 尝试加载已保存的TF-IDF模型
             tfidf = joblib.load(self.TFIDF_dir)
-            self.X_train_tfidf = tfidf.transform(self.X_train)  # 已保存的tfidf不需要再次fit_transform
+
+            # 加载模型 已保存的tfidf无需再次fit
+            self.X_train_tfidf = tfidf.transform(self.X_train)
             self.X_test_tfidf = tfidf.transform(self.X_test)
             print("TF-IDF向量化器加载成功")
-        except  (FileNotFoundError, pickle.UnpicklingError):    # pickle.UnpicklingError防止模型文件损坏    
+        except  (FileNotFoundError, pickle.UnpicklingError):    # pickle.UnpicklingError防止模型文件损坏
             print("未找到TFIDF.pkl，执行TF-IDF向量化器中...")
-            tfidf = TfidfVectorizer(    # TF-IDF特征化（只在训练集上拟合）
+            
+            # TF-IDF特征化（只在训练集上拟合）
+            tfidf = TfidfVectorizer(
                 max_features=5000,
                 ngram_range=(1, 2),
-                stop_words=['english'] if self.name != 'Chinese' else None  # 根据语言设置停用词
+                stop_words=['english'] if self.name != 'Chinese' else None  # 根据语言设置使用英文停用词
             )
-            self.X_train_tfidf = tfidf.fit_transform(self.X_train)    # 对训练集进行fit_transform
-            self.X_test_tfidf = tfidf.transform(self.X_test)  # 对测试集进行transform（使用训练集的词汇表）
+            
+            # 对训练集进行fit_transform 对测试集进行transform（使用训练集的词汇表）
+            self.X_train_tfidf = tfidf.fit_transform(self.X_train)
+            self.X_test_tfidf = tfidf.transform(self.X_test)
+            
+            # 保存模型
             joblib.dump(tfidf, self.TFIDF_dir)
             print("TF-IDF向量化器处理完毕，已保存至", self.TFIDF_dir)
         print("="*50)
@@ -278,24 +247,26 @@ class tradition_models:
 
     def train(self, model_func, name):
         '''由于三个传统模型训练步骤重复，故整合为一个函数'''
+        
+        # 索引三个传统模型的路径
         model_dir = {
             'Naive Bayes': self.NaiveBayes_dir,
             'SVM': self.SVM_dir,
             'Random Forest': self.RandomForest_dir
-        }   # 索引三个传统模型的路径
+        }
+        
         print("\n"+"="*50)
         print(f"{name}_{self.name}:")
-
         try:
-            # 尝试加载已保存的模型文件
-            model = joblib.load(filename=model_dir[name])
-            y_pred = model.predict(self.X_test_tfidf)
+            model = joblib.load(filename=model_dir[name])    # 尝试加载已保存的模型文件
+            y_pred = model.predict(self.X_test_tfidf)    # 转化为预测模型
             print("模型加载成功")
         except (FileNotFoundError, pickle.UnpicklingError):
             print(f"未找到已保存的{name}_{self.name}.pkl，训练{name}模型中...")
             model = model_func  # model_func用于传入训练模型时执行的函数
+            # 训练模型并预测
             model.fit(self.X_train_tfidf, self.y_train)
-            y_pred = model.predict(self.X_test_tfidf)   # 进行预测
+            y_pred = model.predict(self.X_test_tfidf)
 
             # 保存模型
             joblib.dump(model, model_dir[name])
@@ -314,40 +285,6 @@ class tradition_models:
 以下为CNN模型部分:
 '''
 
-'''（该注释可删）
-基于CNN的文本情感分类模型：
-
-模型架构：
-    ▫ 输入层 (Input Layer)
-        - 文本序列（经过分词和编码的整数序列）
-        - 序列长度固定为 max_len（填充或截断）
-    
-    ▫ 嵌入层 (Embedding Layer)
-        - 将词语索引映射为密集向量表示
-        - 学习词语的语义表示，相似词有相似向量
-    
-    ▫ 卷积层 (Convolutional Layer)
-        - 使用多个不同尺寸的卷积核（如3,4,5个词）
-        - 提取文本的局部特征（n-gram模式）
-        - 每个卷积核生成一个特征图
-    
-    ▫ 池化层 (Pooling Layer)
-        - 对每个特征图进行最大池化
-        - 提取每个特征图的最显著特征
-        - 减少参数数量，增加模型鲁棒性
-    
-    ▫ 全连接层 (Fully Connected Layer)
-        - 将池化后的特征拼接并展平
-        - 通过全连接层进行分类
-        - 输出两个类别的概率分布
-
-训练流程：
-    1. 数据预处理：分词、构建词汇表、序列填充
-    2. 模型构建：定义CNN网络结构
-    3. 模型训练：使用反向传播优化参数
-    4. 模型评估：在测试集上评估性能
-'''
-
 
 class CNN:
     def __init__(self, X_train, y_train, X_test, y_test,
@@ -356,7 +293,7 @@ class CNN:
                 embedding_dim=100,   # 词向量维度
                 name='chinese'   # 用于区分中文、英文和双语模型
                 ):
-        
+                    
         self.X_train = X_train
         self.y_train = y_train
         self.X_test = X_test
@@ -365,25 +302,33 @@ class CNN:
         self.max_words = max_words
         self.embedding_dim = embedding_dim
         self.name = name
+                    
+        # 默认设置tokenizer和model为空
         self.tokenizer = None
         self.model = None
-
+        
         self.Tokenizer_dir = os.path.join(models_dir, name, 'Tokenizer.pkl')   # Tokenizer保存路径
         self.CNN_dir = os.path.join(models_dir, name, 'CNN.h5')    # CNN模型保存路径
 
-        self.X_train_pad, self.X_test_pad, self.y_train_np, self.y_test_np = self.preprocess_data() # 预处理数据
+        # 预处理数据
+        self.X_train_pad, self.X_test_pad, self.y_train_np, self.y_test_np = self.preprocess_data()
     
     def preprocess_data(self):
-        """预处理数据：分词、序列化、填充"""
+        '''预处理数据：分词、序列化、填充'''
         print("\n"+"="*50)
         print(f"CNN_{self.name}:")
         try:
+            # 尝试加载tokenizer结果
             self.tokenizer = joblib.load(self.Tokenizer_dir)
             print(f"Tokenizer_{self.name}加载成功")
         except FileNotFoundError:
             print(f"未找到Tokenizer_{self.name}.pkl，执行Tokenizer_{self.name}中...")
-            self.tokenizer = Tokenizer(num_words=self.max_words, oov_token='<OOV>') # 添加OOV标记
+            
+            # 执行预处理
+            self.tokenizer = Tokenizer(num_words=self.max_words, oov_token='<OOV>')
             self.tokenizer.fit_on_texts(self.X_train)
+
+            # 保存tokenizer结果
             joblib.dump(self.tokenizer, self.Tokenizer_dir)
             print(f"Tokenizer_{self.name}处理完毕，已保存至", self.Tokenizer_dir)
         
@@ -402,7 +347,7 @@ class CNN:
         return X_train_pad, X_test_pad, y_train_np, y_test_np
     
     def build_model(self):
-        """构建CNN模型"""
+        '''构建CNN模型'''
         model = Sequential([
             # 嵌入层
             Embedding(input_dim=self.max_words, 
@@ -443,17 +388,19 @@ class CNN:
         return model
     
     def train(self, epochs=10, batch_size=32, validation_split=0.1):
-        """训练CNN模型"""
+        '''训练CNN模型'''
         try:
             # 尝试加载已保存的模型
             self.model = load_model(self.CNN_dir)
             print(f"CNN_{self.name}模型加载成功")
         except (FileNotFoundError, OSError):
             print(f"未找到CNN_{self.name}.h5，训练CNN_{self.name}模型中...")
+            
+            # 构建模型
+            self.model = self.build_model()
 
-            self.model = self.build_model() # 构建模型
-
-            print("CNN模型结构:")   # 打印模型结构
+            # 打印模型结构
+            print("CNN模型结构:")
             self.model.summary()
             
             # 设置早停和模型检查点
@@ -490,10 +437,12 @@ class CNN:
             )
             print(f"CNN_{self.name}模型训练完毕，已保存至", self.CNN_dir)
         print("="*50)
+        
+        # 训练完毕自动生成分类报告
         self.evaluate()
     
     def evaluate(self):
-        """评估CNN模型"""
+        '''评估CNN模型'''
         # 预测
         y_pred_prob = self.model.predict(self.X_test_pad, verbose=0)
         y_pred = (y_pred_prob > 0.5).astype(int).flatten()
@@ -509,29 +458,6 @@ class CNN:
 以下为BERT模型部分:
 '''
 
-'''
-基于BERT的文本情感分类模型：
-
-模型特点：
-    ▫ 预训练语言模型：使用在大规模语料上预训练的BERT模型
-    ▫ 双向编码器：能同时考虑上下文信息，理解句子完整语义
-    ▫ 微调(Fine-tuning)：在特定任务上对预训练模型进行微调
-    ▫ Transformer架构：基于自注意力机制，处理长距离依赖
-
-技术优势：
-    • 上下文感知：能理解一词多义，根据上下文区分词义
-    • 迁移学习：利用预训练知识，少量数据即可达到好效果
-    • 多语言支持：使用多语言BERT可处理中英文混合文本
-    • SOTA性能：在多个NLP任务上达到state-of-the-art
-
-训练流程：
-    1. 文本预处理：分词、添加特殊标记（[CLS]、[SEP]）
-    2. 输入编码：转换为BERT所需的input_ids、attention_mask
-    3. 模型构建：加载预训练BERT，添加分类层
-    4. 微调训练：在情感分类任务上微调BERT参数
-    5. 评估预测：在测试集上评估模型性能
-'''
-
 
 class BERT:
     def __init__(self, X_train, y_train, X_test, y_test,
@@ -540,7 +466,6 @@ class BERT:
                 num_labels=2,          # 分类类别数
                 name='Chinese'   # 用于区分中文、英文和双语模型
                 ):
-        
         self.X_train = X_train
         self.y_train = y_train
         self.X_test = X_test
@@ -549,6 +474,8 @@ class BERT:
         self.model_name = model_name
         self.num_labels = num_labels
         self.name = name
+
+        # 默认设置tokenizer和model为空
         self.tokenizer = None
         self.model = None
 
@@ -562,7 +489,7 @@ class BERT:
         self.X_train_enc, self.X_test_enc, self.y_train_np, self.y_test_np = self.preprocess_data()
 
     def init_tokenizer(self):
-        """初始化BERT tokenizer"""
+        '''初始化BERT tokenizer'''
         print("\n" + "="*50)
         print(f"BERT_{self.name}模型初始化:")
         try:
@@ -580,7 +507,7 @@ class BERT:
         print("="*50)
     
     def encode_texts(self, texts):
-        """将文本编码为BERT输入格式"""
+        '''将文本编码为BERT输入格式'''
         encodings = self.tokenizer(
             texts.tolist() if hasattr(texts, 'tolist') else texts,
             truncation=True,
@@ -591,7 +518,7 @@ class BERT:
         return encodings['input_ids'], encodings['attention_mask']
     
     def preprocess_data(self):
-        """预处理数据：BERT编码"""
+        '''预处理数据：BERT编码'''
         print("数据预处理中...")
         
         # 将标签转换为numpy数组
@@ -621,14 +548,12 @@ class BERT:
         '''构建BERT分类模型 - 直接使用transformers模型'''
         print(f"构建BERT_{self.name}模型中...")
         
-        # 直接加载transformers模型，不进行包装
+        # 加载transformers模型
         model = TFBertForSequenceClassification.from_pretrained(
             self.model_name,
             num_labels=self.num_labels
         )
-        
-        # 检查模型类型，确保不是包装后的
-        print(f"模型类型: {type(model)}")
+
         
         # 配置优化器
         optimizer = AdamWeightDecay(
@@ -655,7 +580,7 @@ class BERT:
         return model
     
     def train(self, epochs=3, batch_size=16, validation_split=0.1):
-        """训练（微调）BERT模型 - 简化版本"""
+        '''训练（微调）BERT模型'''
         print("\n" + "="*50)
         print(f"BERT_{self.name}模型训练:")
         
@@ -671,7 +596,6 @@ class BERT:
         except Exception as e:
             print(f"模型加载失败: {e}")
             print("重新构建模型...")
-            self.model = self.build_model()
             print(f"未找到BERT_{self.name}模型，开始微调训练:{e}")
             
             # 构建模型
@@ -703,7 +627,7 @@ class BERT:
                 )
             ]
             
-            # 准备训练数据 - 确保格式正确
+            # 准备训练数据
             train_inputs = [self.X_train_enc['input_ids'], self.X_train_enc['attention_mask']]
             
             # 训练模型
@@ -718,30 +642,23 @@ class BERT:
                     callbacks=callbacks,
                     verbose=1
                 )
-                
-                # 保存模型 - 使用transformers的保存方式
+                # 保存模型
                 print("保存模型...")
-                
-                # 首先确保模型是TFBertForSequenceClassification类型
-                if hasattr(self.model, 'save_pretrained'):
-                    self.model.save_pretrained(self.BERT_model_dir)
-                    self.tokenizer.save_pretrained(self.BERT_model_dir)
-                    print(f"BERT_{self.name}模型已保存至: {self.BERT_model_dir}")
-                else:
-                    # 如果是包装的模型，只保存权重
-                    print("警告: 模型类型不支持save_pretrained，只保存权重")
-                    self.model.save_weights(os.path.join(self.BERT_model_dir, 'model_weights.h5'))
-                
+                self.model.save_pretrained(self.BERT_model_dir)
+                self.tokenizer.save_pretrained(self.BERT_model_dir)
+                print(f"BERT_{self.name}模型已保存至: {self.BERT_model_dir}")
             except Exception as e:
                 print(f"训练或保存过程中出错: {e}")
                 import traceback
                 traceback.print_exc()
         
         print("="*50)
+
+        # 训练完自动生成分类报告
         return self.evaluate()
     
     def _compile_model(self):
-        """编译模型（用于加载后重新编译）"""
+       '''编译模型（用于加载后重新编译）'''
         optimizer = AdamWeightDecay(
             learning_rate=2e-5,
             weight_decay_rate=0.01,
@@ -761,12 +678,9 @@ class BERT:
         )
     
     def evaluate(self):
-        """评估BERT模型"""
+        '''评估BERT模型'''
         print(f"\nBERT_{self.name}模型评估:")
-        
-        if self.model is None:
-            raise ValueError("模型未初始化")
-        
+                
         # 准备测试数据
         test_inputs = [self.X_test_enc['input_ids'], self.X_test_enc['attention_mask']]
         
@@ -792,7 +706,6 @@ class BERT:
             # 生成分类报告
             report = classification_report(self.y_test_np, y_pred, zero_division=0)
             print(report)
-            
             f.write(f"\n\nBERT_{self.name}分类报告:\n{report}")
             
         except Exception as e:
@@ -801,7 +714,7 @@ class BERT:
             traceback.print_exc()
 
     def _process_predictions(self, y_pred_logits):
-        """统一处理预测结果"""
+        '''统一处理预测结果'''
         y_pred_logits = np.array(y_pred_logits)
         
         # 如果是二分类
@@ -819,8 +732,9 @@ class BERT:
 以下部分为用于对输入预测的预测器：
 '''
 
+
 class TextPredictor:
-    """文本情感预测器"""
+    '''文本情感预测器'''
     def __init__(self, language='Chinese'):
         self.language = language
         self.models_dir = models_dir
@@ -830,7 +744,7 @@ class TextPredictor:
         self.load_models()
     
     def load_models(self):
-        """加载所有模型和预处理工具"""
+        '''加载所有模型和预处理工具'''
         print(f"\n加载{self.language}模型...")
         
         # 加载TF-IDF和传统模型
@@ -878,7 +792,7 @@ class TextPredictor:
         print("所有模型加载完成")
     
     def preprocess_text(self, text):
-        """预处理输入文本"""
+        '''预处理输入文本'''
         # 清洗文本
         cleaned_text = re.sub(r'\n+', ' ', text).strip()
         cleaned_text = re.sub(r'\s+', ' ', cleaned_text)
@@ -898,14 +812,14 @@ class TextPredictor:
         else:
             # 英文处理
             processed_text = cleaned_text.lower()
-        
         return processed_text
     
     def predict_traditional(self, text, model_name):
-        """使用传统机器学习模型预测"""
+        '''使用传统机器学习模型预测'''
         if model_name not in self.traditional_models or self.tfidf is None:
             return None
-        
+            
+        # 预处理文本
         processed_text = self.preprocess_text(text)
         
         # TF-IDF转换
@@ -919,10 +833,11 @@ class TextPredictor:
         return result
     
     def predict_cnn(self, text):
-        """使用CNN模型预测"""
+        '''使用CNN模型预测'''
         if self.cnn_model is None or self.cnn_tokenizer is None:
             return None
-        
+            
+        # 预处理文本
         processed_text = self.preprocess_text(text)
         
         # 序列化和填充
@@ -937,10 +852,10 @@ class TextPredictor:
         return result
     
     def predict_bert(self, text):
-        """使用BERT模型预测"""
+        '''使用BERT模型预测'''
         if self.bert_model is None or self.bert_tokenizer is None:
             return None
-        
+            
         # BERT编码
         encodings = self.bert_tokenizer(
             text,
@@ -970,7 +885,7 @@ class TextPredictor:
         return result
     
     def predict_all(self, text):
-        """使用所有模型进行综合预测"""
+        '''使用所有模型进行综合预测'''
         print("-" * 50)
         
         results = {}
@@ -1000,5 +915,4 @@ class TextPredictor:
             print(f"\n综合结果: {pos_count}个模型预测为正面, {neg_count}个模型预测为负面")
             # 返回投票结果
             return "正面" if pos_count > neg_count else "负面"
-        
         return None
