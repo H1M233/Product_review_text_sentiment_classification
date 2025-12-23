@@ -1,0 +1,255 @@
+TensorFlow 识别到 1 个 GPU:
+GPU 0: /physical_device:GPU:0 - NVIDIA GeForce RTX 4060 Laptop GPU
+cn训练集大小: 10000
+cn测试集大小: 2500
+
+Naive Bayes_Chinese分类报告:
+              precision    recall  f1-score   support
+
+           0       0.76      0.77      0.76      1250
+           1       0.76      0.76      0.76      1250
+
+    accuracy                           0.76      2500
+   macro avg       0.76      0.76      0.76      2500
+weighted avg       0.76      0.76      0.76      2500
+
+
+SVM_Chinese分类报告:
+              precision    recall  f1-score   support
+
+           0       0.76      0.75      0.76      1250
+           1       0.75      0.76      0.76      1250
+
+    accuracy                           0.76      2500
+   macro avg       0.76      0.76      0.76      2500
+weighted avg       0.76      0.76      0.76      2500
+
+
+Random Forest_Chinese分类报告:
+              precision    recall  f1-score   support
+
+           0       0.73      0.75      0.74      1250
+           1       0.74      0.72      0.73      1250
+
+    accuracy                           0.73      2500
+   macro avg       0.73      0.73      0.73      2500
+weighted avg       0.73      0.73      0.73      2500
+
+
+CNN_Chinese分类报告:
+              precision    recall  f1-score   support
+
+           0       0.76      0.69      0.72      1250
+           1       0.71      0.79      0.75      1250
+
+    accuracy                           0.74      2500
+   macro avg       0.74      0.74      0.74      2500
+weighted avg       0.74      0.74      0.74      2500
+
+
+BERT_Chinese分类报告:
+              precision    recall  f1-score   support
+
+           0       0.84      0.67      0.75      1250
+           1       0.73      0.87      0.79      1250
+
+    accuracy                           0.77      2500
+   macro avg       0.78      0.77      0.77      2500
+weighted avg       0.78      0.77      0.77      2500
+
+en训练集大小: 9985
+en测试集大小: 2500
+
+Naive Bayes_English分类报告:
+              precision    recall  f1-score   support
+
+           0       0.86      0.82      0.84      1250
+           1       0.83      0.87      0.85      1250
+
+    accuracy                           0.85      2500
+   macro avg       0.85      0.85      0.85      2500
+weighted avg       0.85      0.85      0.85      2500
+
+
+SVM_English分类报告:
+              precision    recall  f1-score   support
+
+           0       0.87      0.87      0.87      1250
+           1       0.87      0.87      0.87      1250
+
+    accuracy                           0.87      2500
+   macro avg       0.87      0.87      0.87      2500
+weighted avg       0.87      0.87      0.87      2500
+
+
+Random Forest_English分类报告:
+              precision    recall  f1-score   support
+
+           0       0.79      0.86      0.83      1250
+           1       0.85      0.78      0.81      1250
+
+    accuracy                           0.82      2500
+   macro avg       0.82      0.82      0.82      2500
+weighted avg       0.82      0.82      0.82      2500
+
+
+CNN_English分类报告:
+              precision    recall  f1-score   support
+
+           0       0.84      0.88      0.86      1250
+           1       0.87      0.84      0.85      1250
+
+    accuracy                           0.86      2500
+   macro avg       0.86      0.86      0.86      2500
+weighted avg       0.86      0.86      0.86      2500
+
+
+BERT_English分类报告:
+              precision    recall  f1-score   support
+
+           0       0.89      0.93      0.91      1250
+           1       0.93      0.89      0.91      1250
+
+    accuracy                           0.91      2500
+   macro avg       0.91      0.91      0.91      2500
+weighted avg       0.91      0.91      0.91      2500
+
+cn训练集大小: 10000
+cn测试集大小: 2500
+en训练集大小: 9985
+en测试集大小: 2500
+
+Naive Bayes_Bilingual分类报告:
+              precision    recall  f1-score   support
+
+           0       0.79      0.77      0.78      2500
+           1       0.77      0.79      0.78      2500
+
+    accuracy                           0.78      5000
+   macro avg       0.78      0.78      0.78      5000
+weighted avg       0.78      0.78      0.78      5000
+
+
+SVM_Bilingual分类报告:
+              precision    recall  f1-score   support
+
+           0       0.79      0.80      0.79      2500
+           1       0.79      0.79      0.79      2500
+
+    accuracy                           0.79      5000
+   macro avg       0.79      0.79      0.79      5000
+weighted avg       0.79      0.79      0.79      5000
+
+
+Random Forest_Bilingual分类报告:
+              precision    recall  f1-score   support
+
+           0       0.77      0.77      0.77      2500
+           1       0.77      0.77      0.77      2500
+
+    accuracy                           0.77      5000
+   macro avg       0.77      0.77      0.77      5000
+weighted avg       0.77      0.77      0.77      5000
+
+
+CNN_Bilingual分类报告:
+              precision    recall  f1-score   support
+
+           0       0.68      0.91      0.78      2500
+           1       0.86      0.57      0.68      2500
+
+    accuracy                           0.74      5000
+   macro avg       0.77      0.74      0.73      5000
+weighted avg       0.77      0.74      0.73      5000
+
+
+BERT_Bilingual分类报告:
+              precision    recall  f1-score   support
+
+           0       0.83      0.79      0.81      2500
+           1       0.80      0.83      0.81      2500
+
+    accuracy                           0.81      5000
+   macro avg       0.81      0.81      0.81      5000
+weighted avg       0.81      0.81      0.81      5000
+
+使用Naive Bayes_Chinese模型预测内容：
+    '绝对精典的动画片，它是我们八十年代人童年的烙印，直到现在它依然是我的最爱！不仅是它那丰富的故事内容，而且留给我的那一份难忘的童年情怀！这就是优秀动画片对人的真正魅力所在，它们在让人欣赏娱乐的同时也为留住了对岁月的印象。'
+结果为：正面
+
+使用SVM_Chinese模型预测内容：
+    '绝对精典的动画片，它是我们八十年代人童年的烙印，直到现在它依然是我的最爱！不仅是它那丰富的故事内容，而且留给我的那一份难忘的童年情怀！这就是优秀动画片对人的真正魅力所在，它们在让人欣赏娱乐的同时也为留住了对岁月的印象。'
+结果为：正面
+
+使用Random Forest_Chinese模型预测内容：
+    '绝对精典的动画片，它是我们八十年代人童年的烙印，直到现在它依然是我的最爱！不仅是它那丰富的故事内容，而且留给我的那一份难忘的童年情怀！这就是优秀动画片对人的真正魅力所在，它们在让人欣赏娱乐的同时也为留住了对岁月的印象。'
+结果为：正面
+
+使用CNN_Chinese模型预测内容：
+    '绝对精典的动画片，它是我们八十年代人童年的烙印，直到现在它依然是我的最爱！不仅是它那丰富的故事内容，而且留给我的那一份难忘的童年情怀！这就是优秀动画片对人的真正魅力所在，它们在让人欣赏娱乐的同时也为留住了对岁月的印象。'
+结果为：正面
+
+使用BERT_Chinese模型预测内容：
+    '绝对精典的动画片，它是我们八十年代人童年的烙印，直到现在它依然是我的最爱！不仅是它那丰富的故事内容，而且留给我的那一份难忘的童年情怀！这就是优秀动画片对人的真正魅力所在，它们在让人欣赏娱乐的同时也为留住了对岁月的印象。'
+结果为：正面
+
+使用Naive Bayes_English模型预测内容：
+    'I originally had a Brookstone pedometer that was not accurate at all (like for every 1 step, it counted 2-3), so someone told me about this one and I ordered it right away. It is soooooooooooooooo accurate. For the whole day, it might be off by like a few steps, but nothing to worry about. The only thing I dont like about it is that it is huge compared to other pedometers, but I would rather have it big and accurate than not. I would definitely recommend this pedometer to everyone.'
+结果为：正面
+
+使用SVM_English模型预测内容：
+    'I originally had a Brookstone pedometer that was not accurate at all (like for every 1 step, it counted 2-3), so someone told me about this one and I ordered it right away. It is soooooooooooooooo accurate. For the whole day, it might be off by like a few steps, but nothing to worry about. The only thing I dont like about it is that it is huge compared to other pedometers, but I would rather have it big and accurate than not. I would definitely recommend this pedometer to everyone.'
+结果为：正面
+
+使用Random Forest_English模型预测内容：
+    'I originally had a Brookstone pedometer that was not accurate at all (like for every 1 step, it counted 2-3), so someone told me about this one and I ordered it right away. It is soooooooooooooooo accurate. For the whole day, it might be off by like a few steps, but nothing to worry about. The only thing I dont like about it is that it is huge compared to other pedometers, but I would rather have it big and accurate than not. I would definitely recommend this pedometer to everyone.'
+结果为：负面
+
+使用CNN_English模型预测内容：
+    'I originally had a Brookstone pedometer that was not accurate at all (like for every 1 step, it counted 2-3), so someone told me about this one and I ordered it right away. It is soooooooooooooooo accurate. For the whole day, it might be off by like a few steps, but nothing to worry about. The only thing I dont like about it is that it is huge compared to other pedometers, but I would rather have it big and accurate than not. I would definitely recommend this pedometer to everyone.'
+结果为：正面
+
+使用BERT_English模型预测内容：
+    'I originally had a Brookstone pedometer that was not accurate at all (like for every 1 step, it counted 2-3), so someone told me about this one and I ordered it right away. It is soooooooooooooooo accurate. For the whole day, it might be off by like a few steps, but nothing to worry about. The only thing I dont like about it is that it is huge compared to other pedometers, but I would rather have it big and accurate than not. I would definitely recommend this pedometer to everyone.'
+结果为：正面
+
+使用Naive Bayes_Bilingual模型预测内容：
+    '绝对精典的动画片，它是我们八十年代人童年的烙印，直到现在它依然是我的最爱！不仅是它那丰富的故事内容，而且留给我的那一份难忘的童年情怀！这就是优秀动画片对人的真正魅力所在，它们在让人欣赏娱乐的同时也为留住了对岁月的印象。'
+结果为：负面
+
+使用SVM_Bilingual模型预测内容：
+    '绝对精典的动画片，它是我们八十年代人童年的烙印，直到现在它依然是我的最爱！不仅是它那丰富的故事内容，而且留给我的那一份难忘的童年情怀！这就是优秀动画片对人的真正魅力所在，它们在让人欣赏娱乐的同时也为留住了对岁月的印象。'
+结果为：负面
+
+使用Random Forest_Bilingual模型预测内容：
+    '绝对精典的动画片，它是我们八十年代人童年的烙印，直到现在它依然是我的最爱！不仅是它那丰富的故事内容，而且留给我的那一份难忘的童年情怀！这就是优秀动画片对人的真正魅力所在，它们在让人欣赏娱乐的同时也为留住了对岁月的印象。'
+结果为：正面
+
+使用CNN_Bilingual模型预测内容：
+    '绝对精典的动画片，它是我们八十年代人童年的烙印，直到现在它依然是我的最爱！不仅是它那丰富的故事内容，而且留给我的那一份难忘的童年情怀！这就是优秀动画片对人的真正魅力所在，它们在让人欣赏娱乐的同时也为留住了对岁月的印象。'
+结果为：负面
+
+使用BERT_Bilingual模型预测内容：
+    '绝对精典的动画片，它是我们八十年代人童年的烙印，直到现在它依然是我的最爱！不仅是它那丰富的故事内容，而且留给我的那一份难忘的童年情怀！这就是优秀动画片对人的真正魅力所在，它们在让人欣赏娱乐的同时也为留住了对岁月的印象。'
+结果为：正面
+
+使用Naive Bayes_Bilingual模型预测内容：
+    'I originally had a Brookstone pedometer that was not accurate at all (like for every 1 step, it counted 2-3), so someone told me about this one and I ordered it right away. It is soooooooooooooooo accurate. For the whole day, it might be off by like a few steps, but nothing to worry about. The only thing I dont like about it is that it is huge compared to other pedometers, but I would rather have it big and accurate than not. I would definitely recommend this pedometer to everyone.'
+结果为：正面
+
+使用SVM_Bilingual模型预测内容：
+    'I originally had a Brookstone pedometer that was not accurate at all (like for every 1 step, it counted 2-3), so someone told me about this one and I ordered it right away. It is soooooooooooooooo accurate. For the whole day, it might be off by like a few steps, but nothing to worry about. The only thing I dont like about it is that it is huge compared to other pedometers, but I would rather have it big and accurate than not. I would definitely recommend this pedometer to everyone.'
+结果为：正面
+
+使用Random Forest_Bilingual模型预测内容：
+    'I originally had a Brookstone pedometer that was not accurate at all (like for every 1 step, it counted 2-3), so someone told me about this one and I ordered it right away. It is soooooooooooooooo accurate. For the whole day, it might be off by like a few steps, but nothing to worry about. The only thing I dont like about it is that it is huge compared to other pedometers, but I would rather have it big and accurate than not. I would definitely recommend this pedometer to everyone.'
+结果为：负面
+
+使用CNN_Bilingual模型预测内容：
+    'I originally had a Brookstone pedometer that was not accurate at all (like for every 1 step, it counted 2-3), so someone told me about this one and I ordered it right away. It is soooooooooooooooo accurate. For the whole day, it might be off by like a few steps, but nothing to worry about. The only thing I dont like about it is that it is huge compared to other pedometers, but I would rather have it big and accurate than not. I would definitely recommend this pedometer to everyone.'
+结果为：负面
+
+使用BERT_Bilingual模型预测内容：
+    'I originally had a Brookstone pedometer that was not accurate at all (like for every 1 step, it counted 2-3), so someone told me about this one and I ordered it right away. It is soooooooooooooooo accurate. For the whole day, it might be off by like a few steps, but nothing to worry about. The only thing I dont like about it is that it is huge compared to other pedometers, but I would rather have it big and accurate than not. I would definitely recommend this pedometer to everyone.'
+结果为：正面
+
